@@ -1,5 +1,6 @@
 package texto_java;
 import java.io.*;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 //import java.util.HashMap;
@@ -13,7 +14,11 @@ public class TextoJavaMain {
 		String archivoProcesado = "datos procesados.txt";
 		String linea = "";
 		int cantidadPublicaciones = 0;
+		int cantidadFacebook = 0;
+		int cantidadInstagram = 0;
+		int cantidadTwitter = 0;
 		int cantidadPorRedesSociales = 0;
+		int cantidadDatosCapturados = 0;
 		//palabras de interés
 		String [] palabrasClave = {"curso", "maestria", "participa", "seminario", "taller"};
 		
@@ -40,6 +45,7 @@ public class TextoJavaMain {
 		int indiceLinea = 1; 
 		
 		try {
+			
 			//atributo de lectura de texto
 			FileReader fileReader = new FileReader(archivoProcedencia);
 			
@@ -54,6 +60,21 @@ public class TextoJavaMain {
 			
 			//leyendo el archivo línea por línea
 			while((linea = bufferedReader.readLine()) != null) {
+				
+				cantidadDatosCapturados++;
+				
+				for( int k = 0; k < redesSociales.length; k++) {
+					if(linea.contains(redesSociales[k])) {
+						if(redesSociales[k] == "facebook") {
+							cantidadFacebook++;
+						} else if(redesSociales[k] == "instagram") {
+							cantidadInstagram++;
+						} else if(redesSociales[k] == "twitter") {
+							cantidadTwitter++;
+						}
+					}
+				}
+				
 				//verificando indice de contenido
 				if(indiceLinea == 1) {
 					//verificando contenido válido para mostrar
@@ -99,7 +120,36 @@ public class TextoJavaMain {
 		}
 		
 		System.out.println("Archivo generado");
-		System.out.println(categoriaCantidad.values());
-		System.out.println(redSocialCantidad.values());
+		System.out.println("...");
+		System.out.println("\n");
+		System.out.println("--------------------------------------------------------------------------------");
+		
+		System.out.println("Reporte de datos: ");
+		System.out.println("Cantidad de publicaciones analizadas: " + cantidadDatosCapturados/2);
+		System.out.println("Cantidad de publicaciones de Facebook: " + cantidadFacebook);
+		System.out.println("Cantidad de publicaciones de Instagram: " + cantidadInstagram);
+		System.out.println("Cantidad de publicaciones de Twitter: " + cantidadTwitter/2);
+		System.out.println("\n");
+		System.out.println("--------------------------------------------------------------------------------");
+
+		
+		Iterator it1 = categoriaCantidad.keySet().iterator();
+		it1 = categoriaCantidad.keySet().iterator();
+		while(it1.hasNext()){
+		  String key = (String) it1.next();
+		  System.out.println("Categoría: " + key + " ---> Publicaciones encontradas: " + categoriaCantidad.get(key));
+		}
+		
+		System.out.println("--------------------------------------------------------------------------------");
+		
+		Iterator it2 = redSocialCantidad.keySet().iterator();
+		it2 = redSocialCantidad.keySet().iterator();
+		while(it2.hasNext()){
+		  String key = (String) it2.next();
+		  System.out.println("Red Social: " + key + " ---> Publicaciones de interés: " + redSocialCantidad.get(key));
+		}
+		
+		//System.out.println(categoriaCantidad.values());
+		//System.out.println(redSocialCantidad.values());
 	}
 }
